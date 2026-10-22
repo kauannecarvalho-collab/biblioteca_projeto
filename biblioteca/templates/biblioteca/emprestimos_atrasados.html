@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Empréstimos Atrasados</title>
+</head>
+<body>
+    <h1>Relatório de Empréstimos Atrasados</h1>
+
+
+{% if emprestimos %}
+    <table border="1" cellpadding="8">
+        <thead>
+            <tr>
+                <th>Livro</th>
+                <th>Membro</th>
+                <th>Data prevista de devolução</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for emprestimo in emprestimos %}
+                <tr>
+                    <td>{{ emprestimo.livro.titulo }}</td>
+                    <td>{{ emprestimo.membro.nome }}</td>
+                    <td>{{ emprestimo.data_prevista_devolucao|date:"d/m/Y" }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>Nenhum empréstimo atrasado encontrado! 🎉</p>
+{% endif %}
+
+<br>
+<a href="{% url 'lista_livros' %}">Voltar para a lista de livros</a>
+
+</body>
+</html>

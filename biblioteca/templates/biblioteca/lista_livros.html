@@ -1,0 +1,128 @@
+{% extends 'biblioteca/base.html' %}
+
+{% block titulo %}Sistema de Biblioteca{% endblock %}
+
+{% block conteudo %}
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f6f9;
+        color: #333;
+        margin: 0;
+        padding: 20px;
+    }
+
+    h1 {
+        text-align: center;
+        color: #2c3e50;
+        margin-bottom: 30px;
+    }
+
+    h2 {
+        color: #34495e;
+        border-bottom: 2px solid #3498db;
+        padding-bottom: 8px;
+        margin-top: 30px;
+    }
+
+    h3 {
+        color: #2980b9;
+    }
+
+    div {
+        background-color: white;
+        padding: 15px;
+        margin: 15px 0;
+        border-radius: 10px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    }
+
+    button {
+        background-color: #3498db;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 6px;
+        cursor: pointer;
+        margin-top: 10px;
+    }
+
+    button:hover {
+        background-color: #217dbb;
+    }
+
+    select {
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        margin: 5px;
+    }
+
+    hr {
+        border: none;
+        border-top: 1px solid #eee;
+    }
+</style>
+
+<h1>📚 Sistema de Biblioteca</h1>
+
+<form method="GET" action="{% url 'lista_livros' %}">
+    <input
+        type="text"
+        name="busca"
+        placeholder="Digite o título do livro..."
+        value="{{ busca }}"
+    >
+    <button type="submit">Pesquisar</button>
+    <a href="{% url 'lista_livros' %}">Limpar busca</a>
+</form>
+
+<h2>Lista de livros</h2>
+
+{% for livro in livros %} <div> <h3>{{ livro.titulo }}</h3> <p>Autor: {{ livro.autor }}</p> <p>ISBN: {{ livro.isbn }}</p> <p>Cópias disponíveis: {{ livro.copias_disponiveis }}</p>
+
+```
+    {% if livro.copias_disponiveis > 0 %}
+        <form method="POST" action="{% url 'emprestar_livro' livro.id %}">
+            {% csrf_token %}
+
+            <label for="membro_{{ livro.id }}">Selecione o membro:</label>
+
+            <select name="membro_id" id="membro_{{ livro.id }}" required>
+                <option value="">Escolha um membro</option>
+
+                {% for membro in membros %}
+                    <option value="{{ membro.id }}">{{ membro.nome }}</option>
+                {% endfor %}
+            </select>
+
+            <button type="submit">Emprestar</button>
+        </form>
+    {% else %}
+        <p>Não há cópias disponíveis.</p>
+    {% endif %}
+</div>
+<hr>
+```
+
+{% empty %} <p>Nenhum livro cadastrado.</p>
+{% endfor %}
+
+<h2>📋 Empréstimos ativos</h2>
+
+{% for emprestimo in emprestimos %} <div> <p><strong>Livro:</strong> {{ emprestimo.livro.titulo }}</p> <p><strong>Membro:</strong> {{ emprestimo.membro.nome }}</p> <p><strong>Data do empréstimo:</strong> {{ emprestimo.data_emprestimo }}</p> <p><strong>Devolução prevista:</strong> {{ emprestimo.data_prevista_devolucao }}</p>
+
+```
+    <form method="POST" action="{% url 'devolver_livro' emprestimo.id %}">
+        {% csrf_token %}
+        <button type="submit">Devolver livro</button>
+    </form>
+</div>
+<hr>
+```
+
+{% empty %} <p>Não há empréstimos ativos no momento.</p>
+{% endfor %}
+
+{% endblock %}

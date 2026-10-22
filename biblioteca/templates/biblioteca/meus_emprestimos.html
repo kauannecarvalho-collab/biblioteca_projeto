@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meus Empréstimos</title>
+</head>
+<body>
+    <h1>📚 Meus Empréstimos</h1>
+
+    <h2>Membro: {{ membro.nome }}</h2>
+
+    {% if messages %}
+        {% for message in messages %}
+            <p>{{ message }}</p>
+        {% endfor %}
+    {% endif %}
+
+    {% for emprestimo in emprestimos %}
+        <div>
+            <h3>{{ emprestimo.livro.titulo }}</h3>
+            <p>Data do empréstimo: {{ emprestimo.data_emprestimo }}</p>
+            <p>Devolução prevista: {{ emprestimo.data_prevista_devolucao }}</p>
+            <p>Status: {{ emprestimo.get_status_display }}</p>
+            {% if emprestimo.esta_atrasado %} <p style="color: red;"><strong>⚠️ EM ATRASO!</strong></p>
+            {% endif %}
+
+            {% if emprestimo.status == 'ATIVO' %}
+                <form method="POST" action="{% url 'devolver_livro' emprestimo.id %}">
+                    {% csrf_token %}
+                    <button type="submit">Devolver livro</button>
+                </form>
+            {% endif %}
+        </div>
+        <hr>
+    {% empty %}
+        <p>Este membro não possui empréstimos.</p>
+    {% endfor %}
+
+    <p><a href="{% url 'lista_livros' %}">Voltar para a lista de livros</a></p>
+ 
+</body>
+</html>
+
