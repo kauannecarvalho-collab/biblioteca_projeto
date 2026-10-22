@@ -13,9 +13,32 @@
             padding: 0 1rem;
         }
 
-```
-    nav a {
-        margin-right: 1rem;
+
+   nav {
+display: flex;
+justify-content: center;
+align-items: center;
+gap: 12px;
+background-color: #2c3e50;
+padding: 15px;
+border-radius: 10px;
+margin-bottom: 20px;
+}
+
+nav a {
+color: white;
+text-decoration: none;
+font-weight: bold;
+padding: 10px 18px;
+border-radius: 6px;
+transition: background-color 0.3s ease;
+}
+
+nav a:hover {
+background-color: #3498db;
+color: white;
+}
+
     }
 
     table {
@@ -47,7 +70,7 @@
         background: #fff3cd;
     }
 </style>
-```
+
 
 </head>
 <body>
@@ -57,7 +80,7 @@
         <a href="/admin/">Admin</a>
     </nav>
 
-```
+
 <hr>
 
 {% for message in messages %}
@@ -65,7 +88,7 @@
 {% endfor %}
 
 {% block conteudo %}{% endblock %}
-```
+
 
 </body>
 </html>
